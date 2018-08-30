@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--This application created by Ram Patel for a research internship under Dr.Marka at Columbia University from 7/10/2014 to 9/4/2014.-->
+
+    <title>Antenna Factor Calculator</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="AntennaFactorSettings.js"></script>
+    <script src="AntennaFactorFunctions.js"></script>
+	
+</head>
+<body>
+    <h2><center>Antenna Factor Calculator</center></h2>
+    <h3><center>About This Application</center></h3>
+	<p>This applet can be used to calculate the Antenna Factors for any detector and source. The application calculates the configuration of the gravitational wave for both the plus and cross configuration. The application does this by taking the source(here they are magnetars) and detector inputs and calculates new coordinates for the magnetar as a function of time and converts it to the detector coordinate system where the angles for the antenna factor is then calculated. </p>
+	<h3><center>Instructions</center></h3>
+    <p>To use the applet, please follow the instructions below:</p>
+    <ul>
+        <li>Input the detector's coordinates either by choosing a detector(of which 5 are included) in the drop down menu or entering a custom detector by editing the values that you have selected in the drop down menu.</li>
+        <li>Input the source's coordinates either by choosing a source(of which 21 SGRs and AXPs are listed) in the drop down menu or entering a custom source by editing the values that you have selected in the drop down menu.</li>
+        <li>Input the UTC time and the current number of leap seconds(the default is 16) or GPS time of the event.</li>
+        <li>Input the number of leap seconds. This value is automatically set to 16, but can be changed if needed.</li>
+    </ul>
+    <p>Additionally, all non-numeric characters, except for the plus and minus signs, will yield a result of NaN(Not a Number), so to avoid this, please input numerical characters and/or pluses and minuses.</p>
+    <h1><center>Input information below:</center></h1>
+	<hr />
+	<!--This is the selection for Magnetars and Detectors-->
+    <center>
+
+	<table style="width:700px;">
+		<tr>
+			<td>
+			        <label name="lblMagnetars">Magnetar:</label>
+				<select id='Magnetars'>
+				<option value="">Select Magnetar</option>
+			        <optgroup label='SGRs'>
+			            <option value='SGR 0418+5729'>SGR 0418+5729</option>
+			            <option value='SGR 0501+4516'>SGR 0501+4516</option>
+			            <option value='SGR 0526-66'>SGR 0526-66</option>
+			            <option value='SGR 1627-41'>SGR 1627-41</option>
+			            <option value='SGR J1745-2900'>SGR J1745-2900</option>
+			            <option value='SGR 1806-20'>SGR 1806-20</option>
+			            <option value='SGR 1833-0832'>SGR 1833-0832</option>
+			            <option value='SGR 1900+14'>SGR 1900+14</option>
+			            <option value='Swift J1822.3-1606'>Swift J1822.3-1606</option>
+			            <option value='Swift J1834.9-0846'>Swift J1834.9-0846</option>
+			        </optgroup>
+			        <optgroup label='AXPs'>
+			            <option value='CXOU J010043.1-721134'>CXOU J010043.1-721134</option>
+			            <option value='4U 0142+61'>4U 0142+61</option>
+			            <option value='1E 1048.1-5937'>1E 1048.1-5937</option>
+			            <option value='1E 1547.0-5408'>1E 1547.0-5408</option>
+			            <option value='CXO J164710.2-455216'>CXO J164710.2-455216</option>
+			            <option value='1RXS J170849.0-400910'>1RXS J170849.0-400910</option>
+			            <option value='CXOU J171405.7-381031'>CXOU J171405.7-381031</option>
+			            <option value='XTE J1810-197'>XTE J1810-197</option>
+			            <option value='1E 1841-045'>1E 1841-045</option>
+			            <option value='1E 2259+586'>1E 2259+586</option>
+			            <option value='PSR J1622-4950'>PSR J1622-4950</option>
+			        </optgroup>
+			    </select>
+			    <!--This is the options for the detector selection-->
+			</td>
+			<td>
+			     <label name="lblDetectors">Detector:</label><select id='Detectors'>
+				<option value="">Select Detector</option>
+			        <option value='LIGO Livingston'>LIGO Livingston</option>
+			        <option value='LIGO Hanford'>LIGO Hanford</option>
+			        <option value='VIRGO'>VIRGO</option>
+			        <option value='KAGRA'>KAGRA</option>
+			        <option value='GEO600'>GEO 600</option> 
+			    </select>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:top;">
+				<h3>Magnetar Values</h3>	
+				<table>
+					<tr>	
+						<td>
+							<fieldset>
+								<legend>Right Ascension:</legend>
+								<div>Hours: <input type="text" id="MagnetarRA_Hours" maxlength="2" /></div>
+								<div>Minutes: <input type="text" id="MagnetarRA_Minutes" maxlength="10" /></div>
+								<div>Seconds: <input type="text" id="MagnetarRA_Seconds" maxlength="100" /></div>
+							</fieldset>
+
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<fieldset>
+								<legend>Declination:</legend>
+								<div>Degrees: <input type="text" id="MagnetarDEC_Degrees" maxlength="2" /></div>
+								<div>Minutes: <input type="text" id="MagnetarDEC_Minutes" maxlength="10" /></div>
+								<div>Seconds: <input type="text" id="MagnetarDEC_Seconds" maxlength="100" /></div>
+							</fieldset>
+
+						</td>
+
+					</tr>
+				</table>
+				
+			</td>
+			<td style="vertical-align:top;">
+				<h3>Detector Values</h3>
+
+				<fieldset>
+					<legend>Detector Values:</legend>
+					<div>Lat: <input type="text" id="DetectorLat" maxlength="15" /></div>
+					<div>Lng: <input type="text" id="DetectorLng" maxlength="15" /></div>
+					<div>Orientation: <input type="text" id="DetectorOrientation" maxlength="15" /></div>
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+
+    </center>
+<script>
+	document.getElementById('Magnetars').onchange = function () {
+	    SetMagnetarValues(document.getElementById('Magnetars').value);
+	};
+
+	document.getElementById('Detectors').onchange = function () {
+	    SetDetectorValues(document.getElementById('Detectors').value);
+	};
+
+</script>
+<!--This is the input for Date and Time in UTC or GPS Time-->
+	  <h2><center>UTC Time & Date or GPS Time</center></h2>
+        <center>
+		<table>
+					<tr>	
+						<td>
+							<fieldset>
+								<legend>UTC Date & Time:</legend>
+										<div>Day: <input id='UTCDay' type='text' name='UTCDay'></div>
+								        <div>Month: <input id='UTCMonth' type='text' name='UTCMonth'></div>
+										<div>Year: <input id='UTCYear' name='UTCYear' type='text'></div>
+										<div>Hour: <input id='UTCHour' type='text' name='UTCHour'></div>
+										<div>Minute: <input id='UTCMinute' type='text' name='UTCMinute'></div>
+										<div>Second: <input id='UTCSecond' type='text' name='UTCSecond'></div>
+										<div>Leap Second: <select name='LeapSecond' id='LeapSecond'></div>
+											<option value='16'>16 (default)</option>
+											<option value='0'>0</option>
+											<option value='1'>1</option>
+											<option value='2'>2</option>
+											<option value='3'>3</option>
+											<option value='4'>4</option>
+											<option value='5'>5</option>
+											<option value='6'>6</option>
+											<option value='7'>7</option>
+											<option value='8'>8</option>
+											<option value='9'>9</option>
+											<option value='10'>10</option>
+											<option value='11'>11</option>
+											<option value='12'>12</option>
+											<option value='13'>13</option>
+											<option value='14'>14</option>
+											<option value='15'>15</option>
+											<option value='16'>16</option>
+											<option value='17'>17</option>
+											<option value='18'>18</option>
+											<option value='19'>19</option>
+											<option value='20'>20</option>
+											<option value='21'>21</option>
+											<option value='22'>22</option>
+											<option value='23'>23</option>
+											<option value='24'>24</option>
+											<option value='26'>26</option>
+											<option value='27'>27</option>
+											<option value='28'>28</option>
+											<option value='29'>29</option>
+											<option value='30'>30</option>
+										</select>
+										</center>
+							</fieldset>
+						</td>
+
+					</tr>
+				</table>
+    <h4><center>OR</center></h4>
+    <br>
+    <center>
+	<fieldset>
+	<legend>GPS Time:</legend>
+    <input id='gpsTime' name='gpsTime' type='text'>
+	</fieldset>
+    </center>
+	<!--This is the output for the function. This readonly textbox displays the final output-->
+	<fieldset>
+		<legend>F<sub>+</sub> and F<sub>x</sub></legend>
+			<input type="button" value="Submit" onclick="ComputeFValues();"/>
+			<div>F<sub>x</sub>: <input id='FCross' readonly="readonly" name="FCross" maxlength="10"/></div>				
+			<div>F<sub>+</sub>: <input id='FPlus' readonly="readonly" name="FPlus" maxlength="10" /></div>
+	</fieldset>
+</script>
+  </body>
+
+</html>
